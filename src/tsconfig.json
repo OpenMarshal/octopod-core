@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "removeComments": false,
+    "preserveConstEnums": true,
+    "declaration": true,
+    "outDir": "../lib",
+    "typeRoots": [
+      "../node_modules/@types",
+      "../node_modules/@webdav-server"
+    ],
+    "types": [
+      "node"
+    ],
+    "target": "ES5"
+  }
+}
