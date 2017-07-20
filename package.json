@@ -1,0 +1,20 @@
+{
+  "name": "ocotpod-core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/exports.js",
+  "scripts": {
+    "build": "cd src && tsc",
+    "dev": "cd src && tsc -w"
+  },
+  "author": "Adrien Castex <adrien.castex@protonmail.com>",
+  "license": "Unlicense",
+  "dependencies": {
+    "@webdav-server/virtual-stored": "^1.0.2",
+    "octopod": "^1.0.2",
+    "webdav-server": "^2.0.16"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.7"
+  }
+}
