@@ -1,5 +1,5 @@
 {
-  "name": "ocotpod-core",
+  "name": "octopod-core",
   "version": "1.0.0",
   "description": "",
   "main": "./lib/exports.js",
