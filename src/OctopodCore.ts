@@ -177,23 +177,54 @@ export class OctopodCore
                 })
 
                 this.service = new Service('core', 'http://127.0.0.1:' + s.address().port);
-                /*
+                
                 this.service.reference({
                     inputs: {
-                        'core-diagnostics': {
+                        'reserve-file': {
                             isVolatile: true,
                             flushed: true,
-                            mainOutputMethod: 'core-result',
+                            mainOutputMethod: 'reserve-file-result',
                             outputs: {
-                                'core-result': 1
+                                'reserve-file-result': 1
                             }
                         }
                     }
                 }, (e) => {
-                    this.service.bindMethod('core-diagnostics', (data, info) => {
+                    this.service.bindMethod<{ path : string, generationSteps ?: number }>('reserve-file', (data, info) => {
+                        if(!data.generationSteps || data.generationSteps < 0)
+                            data.generationSteps = 2;
+                        
+                        const create = () => {
+                            const names = [];
 
+                            const nextName = () => {
+                                names.push(Math.random().toString());
+                                if(names.length < data.generationSteps)
+                                    return process.nextTick(() => nextName());
+
+                                const path = new webdav.Path(data.path).toString(true) + names.join('_');
+                                ctx.getResource(path, (e, r) => {
+                                    r.create(webdav.ResourceType.File, false, (e) => {
+                                        if(e === webdav.Errors.ResourceAlreadyExists)
+                                            return process.nextTick(() => create());
+                                        if(e)
+                                        {
+                                            this.service.error('reserve-file > create', e);
+                                            return process.nextTick(() => create());
+                                        }
+                                        
+                                        this.service.putObject(info.mainOutput, {
+                                            path
+                                        }, (e) => {
+                                        });
+                                    })
+                                })
+                            }
+                            nextName();
+                        }
+                        create();
                     })
-                })*/
+                })
 
                 if(callback)
                     callback(s, server);
