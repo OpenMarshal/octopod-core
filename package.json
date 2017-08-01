@@ -16,5 +16,6 @@
   },
   "devDependencies": {
     "@types/node": "^8.0.7"
-  }
+  },
+  "types": "./lib/exports.d.ts"
 }
