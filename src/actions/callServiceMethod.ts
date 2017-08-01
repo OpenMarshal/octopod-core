@@ -8,7 +8,17 @@ export function callServiceMethod(env : OctopodCore, ctx : webdav.HTTPRequestCon
     const methodName = ctx.requested.path.fileName();
     const serviceName = ctx.requested.path.getParent().fileName();
     const service = env.services[serviceName];
+    if(!service)
+    {
+        ctx.setCode(webdav.HTTPCodes.NotFound);
+        return cb();
+    }
     const method = service.inputs[methodName];
+    if(!method)
+    {
+        ctx.setCode(webdav.HTTPCodes.NotFound);
+        return cb();
+    }
 
     let nb = Object.keys(method.outputs).length + 1;
     const outputs : { [method : string] : string[] } = {};
