@@ -206,7 +206,7 @@ export class OctopodCore
 
                                 const path = new webdav.Path(data.path).toString(true) + names.join('_');
                                 ctx.getResource(path, (e, r) => {
-                                    r.create(webdav.ResourceType.File, false, (e) => {
+                                    r.create(webdav.ResourceType.File, true, (e) => {
                                         if(e === webdav.Errors.ResourceAlreadyExists)
                                             return process.nextTick(() => create());
                                         if(e)
