@@ -10,6 +10,7 @@ export interface OctopodCoreOptions {
         password: string;
         options: DeCipherOptions;
     };
+    isVerbose?: boolean;
 }
 export declare class OctopodCore {
     actions: {

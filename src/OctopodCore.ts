@@ -17,6 +17,7 @@ export interface OctopodCoreOptions
         password : string
         options : DeCipherOptions
     }
+    isVerbose ?: boolean
 }
 
 export class OctopodCore
@@ -167,10 +168,14 @@ export class OctopodCore
                 }
             })
             
-            server.afterRequest((ctx, next) => {
-                console.log(ctx.request.method, ctx.requested.path.toString(), ctx.response.statusCode, ctx.response.statusMessage)
-                next();
-            })
+            if(this.options.isVerbose)
+            {
+                server.afterRequest((ctx, next) => {
+                    console.log(ctx.request.method, ctx.requested.path.toString(), ctx.response.statusCode, ctx.response.statusMessage)
+                    next();
+                })
+            }
+            
             server.start((s) => {
                 s.on('connection', function(socket) {
                     socket.setTimeout(0);
