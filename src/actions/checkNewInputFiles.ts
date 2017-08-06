@@ -15,11 +15,6 @@ export function checkNewInputFiles(env : OctopodCore, ctx : webdav.HTTPRequestCo
         (env as any).checkNewInputFiles_folderNotify = {};
     const folderNotify = (env as any).checkNewInputFiles_folderNotify;
 
-    const methodName = ctx.requested.path.fileName();
-    const serviceName = ctx.requested.path.getParent().fileName();
-    const service = env.services[serviceName];
-    const method = service.inputs[methodName];
-
     const path = ctx.requested.path.toString(true);
     const name = ctx.user.username + ctx.headers.find('etag', '');
     let lastCheck = 0;
