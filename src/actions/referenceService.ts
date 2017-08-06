@@ -87,6 +87,20 @@ export function referenceService(env : OctopodCore, ctx : webdav.HTTPRequestCont
         nb += Object.keys(info.inputs).length;
         for(const method in info.inputs)
         {
+            if(info.inputs[method].mainOutputMethod)
+            {
+                if(!info.inputs[method].outputs)
+                {
+                    info.inputs[method].outputs = {
+                        [info.inputs[method].mainOutputMethod]: 1
+                    };
+                }
+                else if(!info.inputs[method].outputs[info.inputs[method].mainOutputMethod])
+                {
+                    info.inputs[method].outputs[info.inputs[method].mainOutputMethod] = 1;
+                }
+            }
+
             if(info.inputs[method].outputs)
             {
                 nb += Object.keys(info.inputs[method].outputs).length;
