@@ -20,7 +20,7 @@ export function callServiceMethod(env : OctopodCore, ctx : webdav.HTTPRequestCon
         return cb();
     }
 
-    let nb = Object.keys(method.outputs).length + 1;
+    let nb = (method.outputs ? Object.keys(method.outputs).length : 0) + 1;
     const outputs : { [method : string] : string[] } = {};
 
     if(!(env as any).callServiceMethod_serviceOutputsIndex)
@@ -66,33 +66,36 @@ export function callServiceMethod(env : OctopodCore, ctx : webdav.HTTPRequestCon
         create();
     }
 
-    for(const outputMethodName in method.outputs)
+    if(method.outputs)
     {
-        const mnb = method.outputs[outputMethodName];
-        nb += mnb;
-        for(let i = 0; i < mnb; ++i)
+        for(const outputMethodName in method.outputs)
         {
-            const reengage = () => {
-                const root = '/services/' + serviceName + '/' + outputMethodName + '/';
-                if(serviceOutputsIndex[root] === undefined)
-                    serviceOutputsIndex[root] = 0;
-                const current = ++serviceOutputsIndex[root];
+            const mnb = method.outputs[outputMethodName];
+            nb += mnb;
+            for(let i = 0; i < mnb; ++i)
+            {
+                const reengage = () => {
+                    const root = '/services/' + serviceName + '/' + outputMethodName + '/';
+                    if(serviceOutputsIndex[root] === undefined)
+                        serviceOutputsIndex[root] = 0;
+                    const current = ++serviceOutputsIndex[root];
 
-                ctx.getResource(root + current, (e, r) => {
-                    r.fs.create(ctx, root + current, webdav.ResourceType.File, (e) => {
-                        if(e)
-                            return reengage();
+                    ctx.getResource(root + current, (e, r) => {
+                        r.fs.create(ctx, root + current, webdav.ResourceType.File, (e) => {
+                            if(e)
+                                return reengage();
 
-                        if(!outputs[outputMethodName])
-                            outputs[outputMethodName] = [];
-                        outputs[outputMethodName].push(root + current);
-                        next();
+                            if(!outputs[outputMethodName])
+                                outputs[outputMethodName] = [];
+                            outputs[outputMethodName].push(root + current);
+                            next();
+                        })
                     })
-                })
+                }
+                reengage();
             }
-            reengage();
+            next();
         }
-        next();
     }
     next();
 }
