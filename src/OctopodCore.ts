@@ -190,11 +190,9 @@ export class OctopodCore
                         }
                     }
                 }, (e) => {
-                    this.service.bindMethod<{ path ?: string, service ?: string, method ?: string, generationSteps ?: number }>('reserve-file', (data, info) => {
+                    this.service.bindMethod<{ path : string, generationSteps ?: number }>('reserve-file', (data, info) => {
                         if(!data.generationSteps || data.generationSteps < 0)
                             data.generationSteps = 2;
-                        if(!data.path)
-                            data.path = '/services/' + data.service + '/' + data.method;
                         
                         const create = () => {
                             const names = [];
