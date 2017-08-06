@@ -1,6 +1,6 @@
 {
   "name": "octopod-core",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "",
   "main": "./lib/exports.js",
   "scripts": {
